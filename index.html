@@ -18,7 +18,6 @@
             100% { transform: scale(1); opacity: 1; }
         }
 
-        /* Easter Egg Animation */
         @keyframes shakeBounce {
             0% { transform: translateX(0) rotate(0deg); }
             20% { transform: translateX(-10px) rotate(-5deg); }
@@ -55,6 +54,7 @@
             width: 100%;
             max-width: 380px;
             animation: fadeInUp 0.6s ease-out;
+            position: relative;
         }
 
         h2 { text-align: center; color: #333; margin-top: 0; font-size: 24px; }
@@ -99,6 +99,37 @@
             border: 1px dashed #cbd5e0;
         }
 
+        .preset-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .preset-btn {
+            flex: 1;
+            min-width: 48px;
+            padding: 8px 10px;
+            background: #f1f3f5;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .preset-btn:hover {
+            background: #e9ecef;
+            border-color: #007bff;
+        }
+
+        .preset-btn:active {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
         input {
             width: 100%;
             padding: 12px;
@@ -127,7 +158,6 @@
 
         .calc-btn:hover { background: #0056b3; transform: scale(1.02); }
 
-        /* Style for the Refresh/Reset button */
         .refresh-btn {
             width: 100%;
             background: none;
@@ -167,7 +197,142 @@
         .highlight-green { color: #28a745; font-weight: bold; }
 
         .inline-select { padding: 2px 5px; border-radius: 4px; border: 1px solid #ccc; }
-        .footer { position: fixed; bottom: 10px; width: 100%; text-align: center; font-size: 10px; color: #999; pointer-events: auto; cursor: pointer; }
+
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 10px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .history-btn {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .history-btn:hover { 
+            background: #138496; 
+        }
+
+        .share-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .share-btn:hover { background: #218838; }
+
+        /* History Modal */
+        .history-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .history-content {
+            background: white;
+            width: 100%;
+            max-width: 380px;
+            border-radius: 15px;
+            overflow: hidden;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .history-header {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .history-body {
+            padding: 10px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .history-item {
+            background: #f8f9fa;
+            margin: 8px 0;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border-left: 5px solid #007bff;
+        }
+
+        .history-item .delete-item {
+            background: #dc3545;
+            color: white;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-size: 16px;
+            cursor: pointer;
+            float: right;
+        }
+
+        .delete-all-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .close-modal-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .close-modal-btn:hover {
+            background: #c82333;
+            transform: scale(1.1);
+        }
+
+        .footer { 
+            position: fixed; 
+            bottom: 10px; 
+            width: 100%; 
+            text-align: center; 
+            font-size: 10px; 
+            color: #999; 
+            pointer-events: auto; 
+            cursor: pointer; 
+        }
 
         /* Confetti pieces */
         .confetti {
@@ -184,7 +349,7 @@
 <body>
 
 <div class="card">
-    <h2>Attendance Planner</h2>
+    <h2>Attendance Planner Pro</h2>
 
     <form onsubmit="calculate(); return false;">
         <label>Total classes present:</label>
@@ -200,7 +365,16 @@
         <div id="help-target" class="help-text">
             Enter the percentage you want to maintain.
         </div>
+        
         <input type="number" id="want" placeholder="Ex:75" inputmode="numeric" required>
+
+        <div class="preset-buttons">
+            <button type="button" class="preset-btn" onclick="setTarget(60)">60%</button>
+            <button type="button" class="preset-btn" onclick="setTarget(65)">65%</button>
+            <button type="button" class="preset-btn" onclick="setTarget(70)">70%</button>
+            <button type="button" class="preset-btn" onclick="setTarget(75)">75%</button>
+            <button type="button" class="preset-btn" onclick="setTarget(80)">80%</button>
+        </div>
 
         <button type="submit" class="calc-btn">Calculate Status</button>
         
@@ -213,6 +387,25 @@
         <div id="currentPerc" class="perc"></div>
         <div id="details" class="info"></div>
     </div>
+
+    <div class="action-buttons">
+        <button class="action-btn history-btn" onclick="showHistory()">📜 History</button>
+        <button class="action-btn share-btn" onclick="shareResult()">🔗 Share</button>
+    </div>
+</div>
+
+<div id="historyModal" class="history-modal">
+    <div class="history-content">
+        <div class="history-header">
+            <span>📋 Calculation History</span>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <button onclick="deleteAllHistory()" class="delete-all-btn">🗑️ Delete All</button>
+                <button onclick="closeHistory()" class="close-modal-btn">✕</button>
+            </div>
+        </div>
+        <div id="historyBody" class="history-body">
+            </div>
+    </div>
 </div>
 
 <div class="footer">MADE BY SHARAVAN RAJ</div>
@@ -223,21 +416,160 @@ function toggleHelp() {
     helpEl.style.display = (helpEl.style.display === 'block') ? 'none' : 'block';
 }
 
-// Function to reset the form and clear storage
+function setTarget(percent) {
+    document.getElementById('want').value = percent;
+}
+
+function saveToHistory(present, total, want, currentPerc) {
+    let history = JSON.parse(localStorage.getItem("attendanceHistory") || "[]");
+    
+    const entry = {
+        present: parseFloat(present),
+        total: parseFloat(total),
+        want: parseFloat(want),
+        currentPerc: parseFloat(currentPerc.toFixed(1)),
+        date: new Date().toLocaleString('en-GB', { 
+            day: '2-digit', 
+            month: '2-digit', 
+            year: 'numeric', 
+            hour: '2-digit', 
+            minute: '2-digit' 
+        })
+    };
+
+    history.unshift(entry);
+    if (history.length > 20) history.pop();
+    localStorage.setItem("attendanceHistory", JSON.stringify(history));
+}
+
+function showHistory() {
+    const modal = document.getElementById('historyModal');
+    const body = document.getElementById('historyBody');
+    let history = JSON.parse(localStorage.getItem("attendanceHistory") || "[]");
+
+    if (history.length === 0) {
+        body.innerHTML = `<p style="text-align:center; color:#888; padding:20px;">No calculation history yet.</p>`;
+    } else {
+        body.innerHTML = '';
+        history.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = 'history-item';
+            div.innerHTML = `
+                <strong>${item.currentPerc}%</strong> <span style="color:#666;">(Target ${item.want}%)</span><br>
+                ${item.present} / ${item.total} classes<br>
+                <small style="color:#888;">${item.date}</small>
+                <button class="delete-item" onclick="deleteHistoryItem(${index}); event.stopImmediatePropagation();">🗑</button>
+            `;
+            body.appendChild(div);
+        });
+    }
+
+    modal.style.display = 'flex';
+    // Push a dummy state so the back button has something to "go back" from
+    window.history.pushState({ modalOpen: true }, "");
+}
+
+function closeHistory() {
+    const modal = document.getElementById('historyModal');
+    modal.style.display = 'none';
+    
+    // If the modal was closed via 'X' or clicking outside, 
+    // we go back in history to remove the dummy state we pushed.
+    if (window.history.state && window.history.state.modalOpen) {
+        window.history.back();
+    }
+}
+
+// 1. Close modal when clicking anywhere outside the white box
+window.onclick = function(event) {
+    const modal = document.getElementById('historyModal');
+    if (event.target == modal) {
+        closeHistory();
+    }
+}
+
+// 2. Handle the Browser/Phone Back Button
+window.onpopstate = function(event) {
+    const modal = document.getElementById('historyModal');
+    // If user hits back, just hide the modal (don't call closeHistory or you'll loop)
+    if (modal) {
+        modal.style.display = 'none';
+    }
+};
+
+function deleteHistoryItem(index) {
+    let history = JSON.parse(localStorage.getItem("attendanceHistory") || "[]");
+    history.splice(index, 1);
+    localStorage.setItem("attendanceHistory", JSON.stringify(history));
+    showHistory();
+}
+
+function deleteAllHistory() {
+    if (confirm("Delete all calculation history?")) {
+        localStorage.removeItem("attendanceHistory");
+        showHistory();
+    }
+}
+
+function shareResult() {
+    const percEl = document.getElementById('currentPerc');
+    const detailsEl = document.getElementById('details');
+    const wantInput = document.getElementById('want').value;
+    
+    if (!percEl || percEl.innerText.trim() === "") {
+        alert("Please calculate your attendance first before sharing!");
+        return;
+    }
+
+    const currentPerc = percEl.innerText;
+    let detailsText = detailsEl.innerText;
+
+    // --- FIX STARTS HERE ---
+    // If we are below target, the "Assuming..." block exists. 
+    // We want to strip everything from "Assuming" onwards.
+    if (detailsText.includes("Assuming")) {
+        detailsText = detailsText.split("Assuming")[0].trim();
+    }
+    // --- FIX ENDS HERE ---
+
+    const targetPerc = wantInput ? wantInput + "%" : "Not set";
+
+    let fullMessage = 
+`🎯 My Attendance Status: ${currentPerc}
+Target: ${targetPerc}
+
+${detailsText}
+
+Calculated using Attendance Planner Pro
+${window.location.href}`;
+
+    if (navigator.share) {
+        navigator.share({
+            title: 'Attendance Planner Pro',
+            text: fullMessage,
+            url: window.location.href
+        }).catch(() => {});
+    } else {
+        navigator.clipboard.writeText(fullMessage).then(() => {
+            alert("✅ Clean result copied to clipboard!");
+        }).catch(() => {
+            alert("Failed to copy. Please try again.");
+        });
+    }
+}
+
 function resetForm() {
     document.getElementById('present').value = '';
     document.getElementById('total').value = '';
     document.getElementById('want').value = '';
     document.getElementById('result').style.display = 'none';
     localStorage.removeItem("attendanceData");
-    console.log("Storage cleared.");
 }
 
-// Auto-save input values
 function saveData(present, total, want) {
     localStorage.setItem("attendanceData", JSON.stringify({ present, total, want }));
 }
-
+    
 function calculate() {
     let present = parseFloat(document.getElementById('present').value);
     let total = parseFloat(document.getElementById('total').value);
@@ -256,7 +588,7 @@ function calculate() {
         return;
     }
 
-    saveData(present, total, want); // save automatically
+    saveData(present, total, want);
 
     let currentResult = (present / total) * 100;
     resBox.style.display = "block";
@@ -280,12 +612,11 @@ function calculate() {
         resBox.classList.add('status-fail');
         currentPercText.style.color = "#d9534f";
         details.innerHTML = `
-            <span class="highlight-red">❌ Below Target!</span><br>
-            📍 Classes needed: <span class="highlight-red">${needed}</span><br>
-            📅 Estimated days: <span class="highlight-red">${days} days</span> 
-            <br>
+            <span class="highlight-red">❌ Below Target!</span><br><br>
+            📍 Classes still needed: <span class="highlight-red">${needed}</span><br>
+            📅 Estimated days: <span class="highlight-red">${days} days</span><br><br>
             <span style="font-size: 14px; color: #888;">
-                At 
+                Assuming 
                 <select id="classRate" class="inline-select" onchange="calculate()">
                     <option value="5" ${classesPerDay == 5 ? 'selected' : ''}>5</option>
                     <option value="6" ${classesPerDay == 6 ? 'selected' : ''}>6</option>
@@ -294,13 +625,14 @@ function calculate() {
                     <option value="9" ${classesPerDay == 9 ? 'selected' : ''}>9</option>
                     <option value="10" ${classesPerDay == 10 ? 'selected' : ''}>10</option>
                 </select> 
-                classes/day
+                classes per day
             </span>
         `;
     }
+
+    saveToHistory(present, total, want, currentResult);
 }
 
-// Confetti animation optimized
 function spawnConfetti(count = 50) {
     const colors = ["#ff4d4d", "#4dff88", "#4db8ff", "#ffd24d", "#b84dff"];
     for (let i = 0; i < count; i++) {
@@ -322,7 +654,6 @@ function spawnConfetti(count = 50) {
     }
 }
 
-// Footer easter egg
 let clicks = 0;
 document.querySelector(".footer").addEventListener("click", () => {
     clicks++;
@@ -336,16 +667,17 @@ document.querySelector(".footer").addEventListener("click", () => {
     }
 });
 
-// Load saved values
 window.onload = function() {
     let saved = localStorage.getItem("attendanceData");
     if (saved) {
         let data = JSON.parse(saved);
-        document.getElementById("present").value = data.present;
-        document.getElementById("total").value = data.total;
-        document.getElementById("want").value = data.want;
+        document.getElementById("present").value = data.present || '';
+        document.getElementById("total").value = data.total || '';
+        document.getElementById("want").value = data.want || '';
     }
 };
 </script>
 </body>
 </html>
+
+
